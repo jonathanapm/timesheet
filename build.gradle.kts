@@ -23,6 +23,8 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	implementation("com.h2database:h2:1.3.148")
+	implementation("org.modelmapper:modelmapper:2.4.5")
 }
 
 tasks.withType<KotlinCompile> {

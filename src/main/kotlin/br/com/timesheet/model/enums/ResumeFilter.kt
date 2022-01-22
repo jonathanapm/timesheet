@@ -1,4 +1,4 @@
-package br.com.timesheet.model
+package br.com.timesheet.model.enums
 
 enum class ResumeFilter {
     MONTH,
