@@ -1,7 +1,6 @@
 package br.com.timesheet.service
 
 import br.com.timesheet.model.dto.EmployeeDTO
-import br.com.timesheet.model.enums.ResumeFilter
 import br.com.timesheet.model.util.Mapper
 import br.com.timesheet.persistence.entities.EmployeeEntity
 import br.com.timesheet.persistence.repository.EmployeeRepository
@@ -15,7 +14,13 @@ class EmployeeService {
     @Autowired
     private lateinit var employeeRepository: EmployeeRepository
 
-    fun saveEmployee(employeeDTO: EmployeeDTO) = employeeRepository.save(Mapper.convert(employeeDTO))
+    fun saveEmployee(employeeDTO: EmployeeDTO) {
+        try {
+            employeeRepository.save(Mapper.convert(employeeDTO))
+        } catch (e: Exception) {
+            println("Erro ao cadastrar usuário, error=$e")
+        }
+    }
 
     fun deleteEmployee(employeeId: Long) = employeeRepository.deleteById(employeeId)
 
