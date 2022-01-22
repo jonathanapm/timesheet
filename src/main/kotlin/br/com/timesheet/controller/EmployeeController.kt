@@ -6,12 +6,16 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
-const val EMPLOYEE_CONTROLLER = "/employees"
-
 @RestController
-@RequestMapping(EMPLOYEE_CONTROLLER)
+@RequestMapping("/employees")
 class EmployeeController {
 
     @Autowired
     private lateinit var employeeService: EmployeeService
+
+    @GetMapping
+    fun saveEmployee() {
+
+    }
+
 }

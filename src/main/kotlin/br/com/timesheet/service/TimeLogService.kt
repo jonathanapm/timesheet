@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class LogTimeService {
+class TimeLogService {
 
     @Autowired
     private lateinit var timeLogRepository: TimeLogRepository

@@ -14,6 +14,6 @@ data class TimeLogEntity(
     @Column(name = "registration_date_time", nullable = false)
     val registrationDateTime: LocalDateTime = LocalDateTime.now(),
 
-    @ManyToOne
-    val employee: EmployeeEntity
+    //@ManyToOne
+    //val employee: EmployeeEntity
 )

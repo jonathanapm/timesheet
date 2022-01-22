@@ -30,6 +30,12 @@ data class EmployeeEntity(
     @Enumerated(value = EnumType.STRING)
     val phoneType: PhoneType? = null,
 
-    @OneToMany(mappedBy = "employee_id")
-    val registers: List<TimeLogEntity> = arrayListOf()
+    @Column(name = "create_date", nullable = false)
+    val createDate: LocalDateTime = LocalDateTime.now(),
+
+    @Column(name = "update_date", nullable = false)
+    val updateDate: LocalDateTime = LocalDateTime.now()
+
+    //@OneToMany(mappedBy = "employee_id")
+    //val registers: List<TimeLogEntity> = listOf()
 )
