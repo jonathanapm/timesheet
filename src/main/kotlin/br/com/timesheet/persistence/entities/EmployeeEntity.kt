@@ -1,6 +1,7 @@
 package br.com.timesheet.persistence.entities
 
 import br.com.timesheet.persistence.enum.PhoneType
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 import javax.persistence.*
@@ -9,14 +10,13 @@ import javax.persistence.*
 @Entity(name = "Employee")
 data class EmployeeEntity(
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    val id: UUID? = UUID.randomUUID(),
 
     @Column(nullable = false)
     val name: String = "",
 
     @Column(name = "birth_date", nullable = false)
-    val birthDate: LocalDateTime ,
+    val birthDate: LocalDate,
 
     @Column(nullable = false)
     val office: String,
@@ -31,10 +31,7 @@ data class EmployeeEntity(
     val phoneType: PhoneType? = null,
 
     @Column(name = "create_date", nullable = false)
-    val createDate: LocalDateTime = LocalDateTime.now(),
-
-    @Column(name = "update_date", nullable = false)
-    val updateDate: LocalDateTime = LocalDateTime.now()
+    val createDate: LocalDateTime = LocalDateTime.now()
 
     //@OneToMany(mappedBy = "employee_id")
     //val registers: List<TimeLogEntity> = listOf()
