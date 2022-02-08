@@ -14,17 +14,30 @@ class EmployeeService {
     @Autowired
     private lateinit var employeeRepository: EmployeeRepository
 
-    fun saveEmployee(employeeDTO: EmployeeDTO) {
+    fun saveEmployee(employeeDTO: EmployeeDTO): EmployeeDTO =
         try {
-            employeeRepository.save(Mapper.convert(employeeDTO))
-        } catch (e: Exception) {
-            println("Erro ao cadastrar usuário, error=$e")
+            employeeRepository.save(Mapper.convert<EmployeeDTO, EmployeeEntity>(employeeDTO)).let(Mapper::convert)
+        } catch (e: RuntimeException) {
+            throw RuntimeException(message = "Erro ao salvar novo funcionário")
         }
-    }
 
-    fun deleteEmployee(employeeId: Long) = employeeRepository.deleteById(employeeId)
+    fun deleteEmployee(employeeId: Long): Unit =
+        try {
+            employeeRepository.findById(employeeId).map(employeeRepository::delete).orElseThrow {
+                throw RuntimeException("Usuário não encontrado")
+            }
+        } catch (e: RuntimeException) {
+            throw RuntimeException("Erro ao remover funcinário")
+        }
 
-    fun findEmployeeById(employeeId: Long): Optional<EmployeeEntity> = employeeRepository.findById(employeeId)
-
-    fun getAllEmployees(): MutableList<EmployeeEntity> = employeeRepository.findAll()
+    fun findEmployeeById(employeeId: Long): EmployeeDTO =
+        try {
+            employeeRepository.findById(employeeId).map {
+                Mapper.convert<EmployeeEntity, EmployeeDTO>(it)
+            }.orElseThrow {
+                throw RuntimeException("Usuário não encontrado")
+            }
+        } catch (e: RuntimeException) {
+            throw RuntimeException("Erro na busca de funcionário", e)
+        }
 }

@@ -6,6 +6,6 @@ import java.time.LocalDateTime
 class EmployeeResponse(
     @JsonProperty("mensagem de retorno")
     val msg: String = "",
-    dateTimeResponse: LocalDateTime
-): DefaultResponse(dateTimeResponse) {
+    dateTimeResponse: LocalDateTime = LocalDateTime.now()
+) {
 }

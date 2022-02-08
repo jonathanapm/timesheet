@@ -21,12 +21,20 @@ class EmployeeController {
     private lateinit var employeeService: EmployeeService
 
     @PostMapping("/register", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun saveEmployee(@RequestBody employee: EmployeeDTO): ResponseEntity<EmployeeResponse> {
-        employeeService.saveEmployee(employeeDTO = employee)
-        return ResponseEntity(
-            EmployeeResponse(StatusResponse.CREATE_EMPLOYEE_SUCCESS.message, LocalDateTime.now()),
-            StatusResponse.CREATE_EMPLOYEE_SUCCESS.httpStatus
-        )
-    }
+    fun saveEmployee(@RequestBody employee: EmployeeDTO): ResponseEntity<EmployeeDTO> =
+        employeeService.saveEmployee(employee).run {
+            ResponseEntity(this,StatusResponse.CREATE_EMPLOYEE_SUCCESS.httpStatus)
+        }
 
+    @DeleteMapping("/remove/{employeeId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun deleteEmployee(@PathVariable("employeeId") employeeId: Long): ResponseEntity<Unit> =
+        employeeService.deleteEmployee(employeeId).run {
+            ResponseEntity(HttpStatus.CREATED)
+        }
+
+    @GetMapping("/{employeeId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getEmployee(@PathVariable("employeeId") employeeId: Long): ResponseEntity<EmployeeDTO> =
+        employeeService.findEmployeeById(employeeId).run {
+            ResponseEntity(this, HttpStatus.CREATED)
+        }
 }
