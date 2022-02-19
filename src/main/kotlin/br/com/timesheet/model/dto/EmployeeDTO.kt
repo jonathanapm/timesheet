@@ -9,24 +9,20 @@ import java.util.*
 
 data class EmployeeDTO(
     @JsonIgnore
-    val id: UUID = UUID.randomUUID(),
+    val id: Long = 0,
 
-    @JsonProperty("nome")
     val name: String,
 
-    @JsonProperty("aniversario")
+    val document: String,
+
     val birthDate: LocalDate,
 
-    @JsonProperty("cargo")
     val office: String,
 
-    @JsonProperty("nomeCompleto")
     val completeName: String = "",
 
-    @JsonProperty("telefone")
     val phone: String = "",
 
-    @JsonProperty("tipoTelefone")
     val phoneType: PhoneType = PhoneType.MOBILE,
 
     @JsonIgnore

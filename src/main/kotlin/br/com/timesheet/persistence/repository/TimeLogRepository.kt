@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 interface TimeLogRepository : JpaRepository<TimeLogEntity, Long> {
 
-
+    fun findByEmployeeId(employeeId: Long): List<TimeLogEntity>
 
 }

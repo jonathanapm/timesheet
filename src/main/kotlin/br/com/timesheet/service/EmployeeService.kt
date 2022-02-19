@@ -5,6 +5,7 @@ import br.com.timesheet.model.util.Mapper
 import br.com.timesheet.persistence.entities.EmployeeEntity
 import br.com.timesheet.persistence.repository.EmployeeRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -18,7 +19,7 @@ class EmployeeService {
         try {
             employeeRepository.save(Mapper.convert<EmployeeDTO, EmployeeEntity>(employeeDTO)).let(Mapper::convert)
         } catch (e: RuntimeException) {
-            throw RuntimeException(message = "Erro ao salvar novo funcionário")
+            throw RuntimeException("Erro ao salvar novo funcionário", e)
         }
 
     fun deleteEmployee(employeeId: Long): Unit =
@@ -39,5 +40,16 @@ class EmployeeService {
             }
         } catch (e: RuntimeException) {
             throw RuntimeException("Erro na busca de funcionário", e)
+        }
+
+    fun findByDocument(document: String): EmployeeDTO =
+        try {
+            employeeRepository.findByDocument(document).map {
+                Mapper.convert<EmployeeEntity, EmployeeDTO>(it)
+            }.orElseThrow {
+                throw RuntimeException("Usuário não encontrado")
+            }
+        }catch (e: RuntimeException) {
+            throw RuntimeException("Erro na busca de funcionário por documento", e)
         }
 }
