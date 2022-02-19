@@ -2,7 +2,7 @@ package br.com.timesheet.service
 
 import br.com.timesheet.model.dto.TimeLogDTO
 import br.com.timesheet.model.util.Mapper
-import br.com.timesheet.persistence.entities.TimeLogEntity
+import br.com.timesheet.persistence.entities.TimeLog
 import br.com.timesheet.persistence.repository.TimeLogRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -28,7 +28,7 @@ class TimeLogService {
     }
 
     private fun saveTimeLog(timeLogDTO: TimeLogDTO) =
-        timeLogRepository.save(Mapper.convert<TimeLogDTO, TimeLogEntity>(timeLogDTO))
+        timeLogRepository.save(Mapper.convert<TimeLogDTO, TimeLog>(timeLogDTO))
 
     private fun findTimeLogByEmployeeId(employeeId: Long): List<TimeLogDTO> =
         timeLogRepository.findByEmployeeId(employeeId).map {

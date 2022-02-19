@@ -1,10 +1,12 @@
 package br.com.timesheet.persistence.repository
 
-import br.com.timesheet.persistence.entities.TimeLogEntity
+import br.com.timesheet.persistence.entities.TimeLog
 import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
 
-interface TimeLogRepository : JpaRepository<TimeLogEntity, Long> {
+@Repository
+interface TimeLogRepository : JpaRepository<TimeLog, Long> {
 
-    fun findByEmployeeId(employeeId: Long): List<TimeLogEntity>
+    fun findByEmployeeId(employeeId: Long): List<TimeLog>
 
 }

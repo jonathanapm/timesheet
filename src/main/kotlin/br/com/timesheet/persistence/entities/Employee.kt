@@ -3,12 +3,11 @@ package br.com.timesheet.persistence.entities
 import br.com.timesheet.persistence.enum.PhoneType
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.*
 import javax.persistence.*
 
 @Table(name = "EMPLOYEE")
 @Entity(name = "Employee")
-data class EmployeeEntity(
+data class Employee(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
@@ -32,11 +31,11 @@ data class EmployeeEntity(
 
     @Column(name = "phone_type")
     @Enumerated(value = EnumType.STRING)
-    val phoneType: PhoneType? = null,
+    val phoneType: PhoneType = PhoneType.MOBILE,
 
     @Column(name = "create_date", nullable = false)
-    val createDate: LocalDateTime = LocalDateTime.now()
+    val createDate: LocalDateTime = LocalDateTime.now(),
 
-    //@OneToMany(mappedBy = "employee_id")
-    //val registers: List<TimeLogEntity> = listOf()
+    @OneToMany(mappedBy = "employee")
+    val timeLog: List<TimeLog> = listOf()
 )

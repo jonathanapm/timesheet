@@ -2,12 +2,10 @@ package br.com.timesheet.service
 
 import br.com.timesheet.model.dto.EmployeeDTO
 import br.com.timesheet.model.util.Mapper
-import br.com.timesheet.persistence.entities.EmployeeEntity
+import br.com.timesheet.persistence.entities.Employee
 import br.com.timesheet.persistence.repository.EmployeeRepository
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
 class EmployeeService {
@@ -17,7 +15,7 @@ class EmployeeService {
 
     fun saveEmployee(employeeDTO: EmployeeDTO): EmployeeDTO =
         try {
-            employeeRepository.save(Mapper.convert<EmployeeDTO, EmployeeEntity>(employeeDTO)).let(Mapper::convert)
+            employeeRepository.save(Mapper.convert<EmployeeDTO, Employee>(employeeDTO)).let(Mapper::convert)
         } catch (e: RuntimeException) {
             throw RuntimeException("Erro ao salvar novo funcionário", e)
         }
@@ -34,7 +32,7 @@ class EmployeeService {
     fun findEmployeeById(employeeId: Long): EmployeeDTO =
         try {
             employeeRepository.findById(employeeId).map {
-                Mapper.convert<EmployeeEntity, EmployeeDTO>(it)
+                Mapper.convert<Employee, EmployeeDTO>(it)
             }.orElseThrow {
                 throw RuntimeException("Usuário não encontrado")
             }
@@ -45,7 +43,7 @@ class EmployeeService {
     fun findByDocument(document: String): EmployeeDTO =
         try {
             employeeRepository.findByDocument(document).map {
-                Mapper.convert<EmployeeEntity, EmployeeDTO>(it)
+                Mapper.convert<Employee, EmployeeDTO>(it)
             }.orElseThrow {
                 throw RuntimeException("Usuário não encontrado")
             }
