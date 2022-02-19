@@ -5,12 +5,16 @@ import javax.persistence.*
 
 @Table(name = "TIME_LOG")
 @Entity(name = "TimeLog")
-data class TimeLogEntity(
+data class TimeLog(
 
-    var employeeId: Long,
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long,
 
     @Column(name = "registration_date_time", nullable = false)
     val registrationDateTime: LocalDateTime = LocalDateTime.now(),
 
-    //val employee: EmployeeEntity
+    @ManyToOne
+    @JoinColumn(name = "employeeId")
+    val employee: Employee
 )
