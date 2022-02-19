@@ -7,13 +7,10 @@ import javax.persistence.*
 @Entity(name = "TimeLog")
 data class TimeLogEntity(
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    var employeeId: Long,
 
     @Column(name = "registration_date_time", nullable = false)
     val registrationDateTime: LocalDateTime = LocalDateTime.now(),
 
-    //@ManyToOne
     //val employee: EmployeeEntity
 )

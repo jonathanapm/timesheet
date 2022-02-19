@@ -10,13 +10,17 @@ import javax.persistence.*
 @Entity(name = "Employee")
 data class EmployeeEntity(
     @Id
-    val id: UUID? = UUID.randomUUID(),
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    val id: Long,
 
     @Column(nullable = false)
     val name: String = "",
 
     @Column(name = "birth_date", nullable = false)
     val birthDate: LocalDate,
+
+    @Column(nullable = false)
+    val document: String,
 
     @Column(nullable = false)
     val office: String,
