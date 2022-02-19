@@ -14,7 +14,7 @@ data class TimeLog(
     @Column(name = "registration_date_time", nullable = false)
     val registrationDateTime: LocalDateTime = LocalDateTime.now(),
 
-    @ManyToOne
-    @JoinColumn(name = "employeeId")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employee_id")
     val employee: Employee
 )

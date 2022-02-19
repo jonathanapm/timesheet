@@ -6,12 +6,10 @@ import br.com.timesheet.service.EmployeeService
 import br.com.timesheet.service.TimeLogService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import javax.websocket.server.PathParam
 
 @RestController
@@ -24,14 +22,13 @@ class TimeLogController {
     @Autowired
     private lateinit var employeeService: EmployeeService
 
-    @PostMapping("/apply/{employeeId}")
-    fun registerTimeLog(@RequestBody @Validated timeLogRequest: TimeLogRequest, @PathParam("employeeId") employeeId: Long): ResponseEntity<TimeLogResponse> {
+    @GetMapping("/apply/{employeeId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun registerTimeLog(@PathVariable("employeeId") employeeId: Long): ResponseEntity<TimeLogResponse> {
         return employeeService.findEmployeeById(employeeId)
-            .let { employee ->
-                timeLogRequest.timeLogDTO.employeeId = employeeId
-                timeLogService.registerTimeLog(timeLogRequest.timeLogDTO)
+            .let { employeeDTO ->
+                timeLogService.registerTimeLog(employeeId)
                     .run {
-                        ResponseEntity(TimeLogResponse(employee.name, this), HttpStatus.NO_CONTENT)
+                        ResponseEntity(TimeLogResponse(employeeDTO.name, this), HttpStatus.NO_CONTENT)
                     }
         }
     }

@@ -23,12 +23,12 @@ class EmployeeController {
     fun deleteEmployee(@PathVariable("employeeId") employeeId: Long): ResponseEntity<Unit> =
         ResponseEntity(employeeService.deleteEmployee(employeeId), HttpStatus.OK)
 
-    @GetMapping("/{employeeId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping("/id/{employeeId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getEmployee(@PathVariable("employeeId") employeeId: Long): ResponseEntity<EmployeeDTO> =
         ResponseEntity(employeeService.findEmployeeById(employeeId), HttpStatus.OK)
 
 
-    @GetMapping("/{document}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @GetMapping("/document/{document}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getEmployeeByDocument(@PathVariable("document") document: String): ResponseEntity<EmployeeDTO> =
         ResponseEntity(employeeService.findByDocument(document), HttpStatus.OK)
 }
