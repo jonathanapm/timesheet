@@ -36,6 +36,6 @@ data class Employee(
     @Column(name = "create_date", nullable = false)
     val createDate: LocalDateTime = LocalDateTime.now(),
 
-    @OneToMany(mappedBy = "employee")
-    val timeLog: List<TimeLog> = listOf()
+    @OneToMany(mappedBy = "employee", fetch = FetchType.LAZY)
+    val timeLog: List<TimeLog>
 )
