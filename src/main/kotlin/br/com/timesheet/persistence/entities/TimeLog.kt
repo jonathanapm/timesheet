@@ -9,12 +9,11 @@ data class TimeLog(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 0,
 
     @Column(name = "registration_date_time", nullable = false)
     val registrationDateTime: LocalDateTime = LocalDateTime.now(),
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "employee_id")
-    val employee: Employee
+    @Column(name = "employeeId", nullable = false)
+    val employeeId: Long
 )
