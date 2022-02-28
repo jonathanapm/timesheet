@@ -19,35 +19,32 @@ class TimeLogService {
     @Autowired
     private lateinit var timeLogRepository: TimeLogRepository
 
-    fun registerTimeLog(employeeId: Long): List<TimeLogDTO> {
-        findTimeLogByEmployeeId(employeeId, null).let {
+    fun registerTimeLog(employeeDTO: EmployeeDTO): List<TimeLogDTO> {
+        findTimeLog(employeeDTO.id, null).let {
             if (it.size >= REGISTER_MAX) {
                 throw RuntimeException("Não é possível inserir novo registro. Banco de horas do dia completo")
             }
-            TimeLogDTO().apply {
-                this.employeeId = employeeId
-                saveTimeLog(this).let(it::plus)
-                return it
-            }
+            return it.plus(TimeLog(employeeId = employeeDTO.id)).let(::saveTimeLog)
         }
     }
 
-    private fun saveTimeLog(timeLogDTO: TimeLogDTO) =
+    private fun saveTimeLog(timeLogList: List<TimeLog>): List<TimeLogDTO> =
         try {
-            timeLogRepository.save(Mapper.convert<TimeLogDTO, TimeLog>(timeLogDTO)).let {
-                Mapper.convert<TimeLog, TimeLogDTO>(it)
-            }
+            timeLogRepository.saveAll(timeLogList).map(Mapper::convert)
         } catch (e: RuntimeException) {
             throw e
         }
 
-    fun findTimeLogByEmployeeId(employeeId: Long, date: LocalDate?): List<TimeLogDTO> =
+    private fun findTimeLog(employeeId: Long, date: LocalDate?): List<TimeLog> =
         try {
-            val dateTime = date?.toString() ?: LocalDate.now().toString()
-            timeLogRepository.findByEmployeeId(employeeId, dateTime).map {
-                Mapper.convert(it)
-            }
+            timeLogRepository.findByEmployeeId(employeeId)
+                .filter {
+                    it.registrationDateTime.toLocalDate() == (date ?: LocalDate.now())
+                }
         } catch (e: RuntimeException) {
             throw e
         }
+
+    fun getTimeLogByEmployeeAndDate(employeeId: Long, date: LocalDate): List<TimeLogDTO> =
+        findTimeLog(employeeId, date).let(Mapper::convert)
 }
