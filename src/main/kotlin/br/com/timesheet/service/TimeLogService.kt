@@ -1,5 +1,7 @@
 package br.com.timesheet.service
 
+import br.com.timesheet.controller.exception.ApplicationError
+import br.com.timesheet.controller.exception.LimitedAttemptsException
 import br.com.timesheet.model.dto.EmployeeDTO
 import br.com.timesheet.model.dto.TimeLogDTO
 import br.com.timesheet.model.util.Mapper
@@ -19,15 +21,25 @@ class TimeLogService {
     @Autowired
     private lateinit var timeLogRepository: TimeLogRepository
 
+    /**
+     * Registro de horas para um funcionário
+     * @param employeeDTO dados do usuário
+     * @return dados de horas inseridos
+     */
     fun registerTimeLog(employeeDTO: EmployeeDTO): List<TimeLogDTO> {
         findTimeLog(employeeDTO.id, null).let {
             if (it.size >= REGISTER_MAX) {
-                throw RuntimeException("Não é possível inserir novo registro. Banco de horas do dia completo")
+                throw LimitedAttemptsException()
             }
             return it.plus(TimeLog(employeeId = employeeDTO.id)).let(::saveTimeLog)
         }
     }
 
+    /**
+     * Salva o funcinário na base
+     * @param timeLogList lista de horas a serem salvas
+     * @return registro de horas
+     */
     private fun saveTimeLog(timeLogList: List<TimeLog>): List<TimeLogDTO> =
         try {
             timeLogRepository.saveAll(timeLogList).map(Mapper::convert)
@@ -35,6 +47,12 @@ class TimeLogService {
             throw e
         }
 
+    /**
+     * Busca registro de horas do funcinário
+     * @param employeeId identificador do funcionaŕio
+     * @param date data dos registros de horas
+     * @return dados encontrados
+     */
     private fun findTimeLog(employeeId: Long, date: LocalDate?): List<TimeLog> =
         try {
             timeLogRepository.findByEmployeeId(employeeId)
@@ -45,6 +63,12 @@ class TimeLogService {
             throw e
         }
 
+    /**
+     * Busca registro de horas do funcinário
+     * @param employeeId identificador do funcionaŕio
+     * @param date data dos registros de horas
+     * @return dados encontrados
+     */
     fun getTimeLogByEmployeeAndDate(employeeId: Long, date: LocalDate): List<TimeLogDTO> =
         findTimeLog(employeeId, date).let(Mapper::convert)
 }

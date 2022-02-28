@@ -10,6 +10,9 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 
+/**
+ * Controle de registro de horas
+ */
 @RestController
 @RequestMapping("time-log")
 class TimeLogController {
@@ -20,6 +23,12 @@ class TimeLogController {
     @Autowired
     private lateinit var employeeService: EmployeeService
 
+    /**
+     * Busca o registro de horas de um funcionário
+     * @param employeeId identificador do funcionário
+     * @param date data da busca dos registros
+     * @return dados dos registros encontrados
+     */
     @GetMapping("/{employeeId}/{date}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getTimeLogByEmployeeId(@PathVariable("employeeId") employeeId: Long,
                                @PathVariable("date") date: String): ResponseEntity<TimeLogResponse> {
@@ -31,6 +40,11 @@ class TimeLogController {
         }
     }
 
+    /**
+     * Insere um novo registro de horas para um funcionário
+     * @param employeeId identificador do funcionário
+     * @return dados do registro inserido
+     */
     @GetMapping("/apply/{employeeId}", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun registerTimeLog(@PathVariable("employeeId") employeeId: Long): ResponseEntity<TimeLogResponse> {
         return employeeService.findEmployeeById(employeeId)
