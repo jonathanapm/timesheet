@@ -2,6 +2,9 @@ package br.com.timesheet.controller
 
 import br.com.timesheet.model.dto.EmployeeDTO
 import br.com.timesheet.service.EmployeeService
+import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.ApiResponse
+import io.swagger.annotations.ApiResponses
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -24,6 +27,8 @@ class EmployeeController {
      * @return dados do funcionário salvo
      */
     @PostMapping("/register", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ApiOperation("Salva um novo funcionário na base")
+    @ApiResponse(code = 201, message = "Informa que o funcionário foi criado com sucesso")
     fun saveEmployee(@RequestBody employee: EmployeeDTO): ResponseEntity<EmployeeDTO> =
         ResponseEntity(employeeService.saveEmployee(employee), HttpStatus.CREATED)
 
@@ -33,6 +38,11 @@ class EmployeeController {
      * @return se o funcionário foi deletado com sucesso
      */
     @DeleteMapping("/remove/{employeeId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ApiOperation("Delete um funcionário da base")
+    @ApiResponses(value = [
+        ApiResponse(code = 200, message = "Informa que o usuário foi removido com sucesso"),
+        ApiResponse(code = 404, message = "Funcionário não encontrado")
+    ])
     fun deleteEmployee(@PathVariable("employeeId") employeeId: Long): ResponseEntity<Unit> =
         ResponseEntity(employeeService.deleteEmployee(employeeId), HttpStatus.OK)
 
@@ -42,6 +52,11 @@ class EmployeeController {
      * @return funcionário encontrado
      */
     @GetMapping("/id/{employeeId}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ApiOperation("Busca um funcionário na base através do seu identificar")
+    @ApiResponses(value = [
+        ApiResponse(code = 200, message = "Funcionário encontrado na base de dados"),
+        ApiResponse(code = 404, message = "Funcionário não encontrado")
+    ])
     fun getEmployee(@PathVariable("employeeId") employeeId: Long): ResponseEntity<EmployeeDTO> =
         ResponseEntity(employeeService.findEmployeeById(employeeId), HttpStatus.OK)
 
@@ -52,6 +67,11 @@ class EmployeeController {
      * @return funcionário encontrado
      */
     @GetMapping("/document/{document}", produces = [MediaType.APPLICATION_JSON_VALUE])
+    @ApiOperation("Busca um funcionário na base através do seu documento")
+    @ApiResponses(value = [
+        ApiResponse(code = 200, message = "Funcionário encontrado na base de dados"),
+        ApiResponse(code = 404, message = "Funcionário não encontrado")
+    ])
     fun getEmployeeByDocument(@PathVariable("document") document: String): ResponseEntity<EmployeeDTO> =
         ResponseEntity(employeeService.findByDocument(document), HttpStatus.OK)
 }
