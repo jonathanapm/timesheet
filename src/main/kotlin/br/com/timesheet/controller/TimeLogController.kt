@@ -35,7 +35,7 @@ class TimeLogController {
         return employeeService.findEmployeeById(employeeId).let {
             timeLogService.getTimeLogByEmployeeAndDate(employeeId, LocalDate.parse(date))
                 .run {
-                    ResponseEntity(TimeLogResponse(it.name, this), HttpStatus.OK)
+                    ResponseEntity(TimeLogResponse(it.name, this).toJson(), HttpStatus.OK)
                 }
         }
     }
@@ -51,7 +51,7 @@ class TimeLogController {
             .let { employeeDTO ->
                 timeLogService.registerTimeLog(employeeDTO)
                     .run {
-                        ResponseEntity(TimeLogResponse(employeeDTO.name, this), HttpStatus.OK)
+                        ResponseEntity(TimeLogResponse(employeeDTO.name, this).toJson(), HttpStatus.OK)
                     }
         }
     }
