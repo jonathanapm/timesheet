@@ -7,6 +7,7 @@ import java.time.LocalDateTime
 
 class EmployeeDTO
 {
+    @JsonIgnore
     val id: Long = 0
 
     val name: String = ""
