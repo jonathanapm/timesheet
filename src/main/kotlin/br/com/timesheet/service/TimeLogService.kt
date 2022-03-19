@@ -1,6 +1,5 @@
 package br.com.timesheet.service
 
-import br.com.timesheet.controller.exception.ApplicationError
 import br.com.timesheet.controller.exception.LimitedAttemptsException
 import br.com.timesheet.model.dto.EmployeeDTO
 import br.com.timesheet.model.dto.TimeLogDTO
@@ -31,7 +30,8 @@ class TimeLogService {
             if (it.size >= REGISTER_MAX) {
                 throw LimitedAttemptsException()
             }
-            return it.plus(TimeLog(employeeId = employeeDTO.id)).let(::saveTimeLog)
+            return it.plus(TimeLog(employee = Mapper.convert(employeeDTO)))
+                .let(::saveTimeLog)
         }
     }
 
@@ -53,22 +53,17 @@ class TimeLogService {
      * @param date data dos registros de horas
      * @return dados encontrados
      */
+    fun getTimeLogByEmployeeAndDate(employeeId: Long, date: LocalDate): List<TimeLogDTO> =
+        findTimeLog(employeeId, date).let(Mapper::convert)
+
     private fun findTimeLog(employeeId: Long, date: LocalDate?): List<TimeLog> =
         try {
             timeLogRepository.findByEmployeeId(employeeId)
                 .filter {
                     it.registrationDateTime.toLocalDate() == (date ?: LocalDate.now())
                 }
-        } catch (e: RuntimeException) {
-            throw e
-        }
 
-    /**
-     * Busca registro de horas do funcinário
-     * @param employeeId identificador do funcionaŕio
-     * @param date data dos registros de horas
-     * @return dados encontrados
-     */
-    fun getTimeLogByEmployeeAndDate(employeeId: Long, date: LocalDate): List<TimeLogDTO> =
-        findTimeLog(employeeId, date).let(Mapper::convert)
+        } catch (e: RuntimeException) {
+            throw RuntimeException("Erro na busca de registros", e)
+        }
 }

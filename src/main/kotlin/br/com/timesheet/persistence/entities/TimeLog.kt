@@ -14,6 +14,7 @@ data class TimeLog(
     @Column(name = "registration_date_time", nullable = false)
     val registrationDateTime: LocalDateTime = LocalDateTime.now(),
 
-    @Column(name = "employeeId", nullable = false)
-    val employeeId: Long
+    @ManyToOne
+    @JoinColumn(name = "employeeId")
+    val employee: Employee
 )

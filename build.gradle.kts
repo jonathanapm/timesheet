@@ -27,6 +27,8 @@ dependencies {
 	implementation("org.modelmapper:modelmapper:2.4.5")
 	implementation("io.springfox:springfox-swagger-ui:2.9.2")
 	implementation("io.springfox:springfox-swagger2:2.9.2")
+	implementation("org.springframework.boot:spring-boot-starter-validation:2.6.4")
+	implementation("org.springframework.boot:spring-boot-starter-web:2.6.3")
 }
 
 tasks.withType<KotlinCompile> {
