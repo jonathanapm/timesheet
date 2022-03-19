@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 class TimeLogDTO {
     @JsonIgnore
-    var employeeId: Long = 0
+    val employee: EmployeeDTO = EmployeeDTO()
 
     val registrationDateTime: LocalDateTime = LocalDateTime.now()
 }

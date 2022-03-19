@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import javax.validation.Valid
 
 /**
  * Controlador do fluxo de funcionários
@@ -28,8 +29,11 @@ class EmployeeController {
      */
     @PostMapping("/register", produces = [MediaType.APPLICATION_JSON_VALUE])
     @ApiOperation("Salva um novo funcionário na base")
-    @ApiResponse(code = 201, message = "Informa que o funcionário foi criado com sucesso")
-    fun saveEmployee(@RequestBody employee: EmployeeDTO): ResponseEntity<EmployeeDTO> =
+    @ApiResponses(
+        ApiResponse(code = 201, message = "Informa que o funcionário foi criado com sucesso"),
+        ApiResponse(code = 400, message = "Dados inválidos")
+    )
+    fun saveEmployee(@RequestBody @Valid employee: EmployeeDTO): ResponseEntity<EmployeeDTO> =
         ResponseEntity(employeeService.saveEmployee(employee), HttpStatus.CREATED)
 
     /**
@@ -60,7 +64,6 @@ class EmployeeController {
     fun getEmployee(@PathVariable("employeeId") employeeId: Long): ResponseEntity<EmployeeDTO> =
         ResponseEntity(employeeService.findEmployeeById(employeeId), HttpStatus.OK)
 
-
     /**
      * Buscar um funcionário na base através do seu documento
      * @param document documento do funcionário
@@ -73,5 +76,5 @@ class EmployeeController {
         ApiResponse(code = 404, message = "Funcionário não encontrado")
     ])
     fun getEmployeeByDocument(@PathVariable("document") document: String): ResponseEntity<EmployeeDTO> =
-        ResponseEntity(employeeService.findByDocument(document), HttpStatus.OK)
+        ResponseEntity(employeeService.findEmployeeByDocument(document), HttpStatus.OK)
 }

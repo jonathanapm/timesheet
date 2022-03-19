@@ -7,24 +7,23 @@ import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
+import javax.validation.Valid
 
 /**
  * Controle de registro de horas
  */
 @RestController
 @RequestMapping("time-log")
-class TimeLogController {
-
-    @Autowired
-    private lateinit var timeLogService: TimeLogService
-
-    @Autowired
-    private lateinit var employeeService: EmployeeService
+class TimeLogController(
+    private val timeLogService: TimeLogService,
+    private val employeeService: EmployeeService
+) {
 
     /**
      * Busca o registro de horas de um funcionário
@@ -39,14 +38,14 @@ class TimeLogController {
         ApiResponse(code = 404, message = "Funcionário não encontrado")
     ])
     fun getTimeLogByEmployeeId(@PathVariable("employeeId") employeeId: Long,
-                               @PathVariable("date") date: String): ResponseEntity<TimeLogResponse> {
-        return employeeService.findEmployeeById(employeeId).let {
+                               @PathVariable("date") @Valid @DateTimeFormat(pattern = "yyyy-MM-dd") date: String
+    ): ResponseEntity<TimeLogResponse> =
+        employeeService.findEmployeeById(employeeId).let {
             timeLogService.getTimeLogByEmployeeAndDate(employeeId, LocalDate.parse(date))
                 .run {
                     ResponseEntity(TimeLogResponse(it.name, this).toJson(), HttpStatus.OK)
                 }
         }
-    }
 
     /**
      * Insere um novo registro de horas para um funcionário
@@ -58,17 +57,14 @@ class TimeLogController {
     @ApiResponses(value = [
         ApiResponse(code = 200, message = "Registro de hora realizado com sucesso"),
         ApiResponse(code = 404, message = "Funcionário não encontrado"),
-        ApiResponse(code = 403, message = "Limite de horas diárias excedidas"),
+        ApiResponse(code = 400, message = "Limite de horas diárias excedidas"),
     ])
-    fun registerTimeLog(@PathVariable("employeeId") employeeId: Long): ResponseEntity<TimeLogResponse> {
-        return employeeService.findEmployeeById(employeeId)
+    fun registerTimeLog(@PathVariable("employeeId") employeeId: Long): ResponseEntity<TimeLogResponse> =
+        employeeService.findEmployeeById(employeeId)
             .let { employeeDTO ->
                 timeLogService.registerTimeLog(employeeDTO)
                     .run {
                         ResponseEntity(TimeLogResponse(employeeDTO.name, this).toJson(), HttpStatus.OK)
                     }
         }
-    }
-
-
 }

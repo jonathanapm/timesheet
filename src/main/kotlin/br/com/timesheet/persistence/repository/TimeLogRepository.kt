@@ -14,5 +14,5 @@ interface TimeLogRepository : JpaRepository<TimeLog, Long> {
      * @param employeeId identificador do funcionário
      * @return registro de horas encontradas
      */
-    fun findByEmployeeId(employeeId: Long): List<TimeLog>
+    fun findByEmployeeId(@Param("employeeId") employeeId: Long): List<TimeLog>
 }

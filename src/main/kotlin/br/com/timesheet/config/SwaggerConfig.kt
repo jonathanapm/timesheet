@@ -25,7 +25,7 @@ class SwaggerConfig {
         Docket(DocumentationType.SWAGGER_2)
             .groupName("timesheet-api")
             .select()
-            .apis(RequestHandlerSelectors.any())
+            .apis(RequestHandlerSelectors.basePackage("br.com.timesheet.controller"))
             .paths(PathSelectors.any())
             .build()
             .apiInfo(apiInfo())

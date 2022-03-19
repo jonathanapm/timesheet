@@ -9,6 +9,7 @@ import javax.persistence.*
 @Entity(name = "Employee")
 data class Employee(
     @Id
+    @Column(name = "employeeId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long,
 
@@ -35,4 +36,7 @@ data class Employee(
 
     @Column(name = "create_date", nullable = false)
     val createDate: LocalDateTime = LocalDateTime.now(),
+
+    @OneToMany(mappedBy = "employee")
+    val timeLogList: List<TimeLog>
 )
