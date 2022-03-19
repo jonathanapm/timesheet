@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service
 import java.time.LocalDate
 
 @Service
-class TimeLogService(private timeLogRepository: TimeLogRepository) {
+class TimeLogService(private val timeLogRepository: TimeLogRepository) {
 
     companion object {
         const val REGISTER_MAX = 4
@@ -41,7 +41,7 @@ class TimeLogService(private timeLogRepository: TimeLogRepository) {
         try {
             timeLogRepository.saveAll(timeLogList).map(Mapper::convert)
         } catch (e: RuntimeException) {
-            throw e
+            throw RuntimeException("Erro ao salvar registro de horas", e)
         }
 
     /**
