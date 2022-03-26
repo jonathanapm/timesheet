@@ -1,6 +1,7 @@
 package br.com.timesheet.persistence.entities
 
 import br.com.timesheet.persistence.enum.PhoneType
+import org.springframework.security.core.userdetails.UserDetails
 import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.persistence.*
@@ -37,6 +38,30 @@ data class Employee(
     @Column(name = "create_date", nullable = false)
     val createDate: LocalDateTime = LocalDateTime.now(),
 
+    @Column(nullable = false)
+    val email: String,
+
+    @Column(name = "login_security", nullable = false)
+    val loginSecurity: String,
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    val profiles: List<Profile>,
+
     @OneToMany(mappedBy = "employee")
     val timeLogList: List<TimeLog>
-)
+): UserDetails {
+
+    override fun getAuthorities() = profiles
+
+    override fun getPassword() =  loginSecurity
+
+    override fun getUsername() = email
+
+    override fun isAccountNonExpired() = true
+
+    override fun isAccountNonLocked() = true
+
+    override fun isCredentialsNonExpired() = true
+
+    override fun isEnabled() = true
+}

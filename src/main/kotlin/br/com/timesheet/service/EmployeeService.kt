@@ -6,7 +6,6 @@ import br.com.timesheet.model.dto.EmployeeDTO
 import br.com.timesheet.model.util.Mapper
 import br.com.timesheet.persistence.entities.Employee
 import br.com.timesheet.persistence.repository.EmployeeRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
@@ -46,7 +45,7 @@ class EmployeeService(private val employeeRepository: EmployeeRepository) {
      * @param employeeId identificador do funcionário
      * @return dados do funcionário encontrado
      */
-    fun findEmployeeById(employeeId: Long): EmployeeDTO =
+    fun findEmployee(employeeId: Long): EmployeeDTO =
         try {
             employeeRepository.findById(employeeId)
                 .map { Mapper.convert<Employee, EmployeeDTO>(it) }
@@ -60,7 +59,7 @@ class EmployeeService(private val employeeRepository: EmployeeRepository) {
      * @param document documento do funcionário
      * @return dados do funcionário encontrado
      */
-    fun findEmployeeByDocument(document: String): EmployeeDTO =
+    fun findEmployee(document: String): EmployeeDTO =
         findByDocument(document)
             .map { Mapper.convert<Employee, EmployeeDTO>(it) }
             .orElseThrow(::EmployeeNotFound)
