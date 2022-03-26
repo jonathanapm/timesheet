@@ -62,7 +62,7 @@ class EmployeeController {
         ApiResponse(code = 404, message = "Funcionário não encontrado")
     ])
     fun getEmployee(@PathVariable("employeeId") employeeId: Long): ResponseEntity<EmployeeDTO> =
-        ResponseEntity(employeeService.findEmployeeById(employeeId), HttpStatus.OK)
+        ResponseEntity(employeeService.findEmployee(employeeId), HttpStatus.OK)
 
     /**
      * Buscar um funcionário na base através do seu documento
@@ -76,5 +76,5 @@ class EmployeeController {
         ApiResponse(code = 404, message = "Funcionário não encontrado")
     ])
     fun getEmployeeByDocument(@PathVariable("document") document: String): ResponseEntity<EmployeeDTO> =
-        ResponseEntity(employeeService.findEmployeeByDocument(document), HttpStatus.OK)
+        ResponseEntity(employeeService.findEmployee(document), HttpStatus.OK)
 }

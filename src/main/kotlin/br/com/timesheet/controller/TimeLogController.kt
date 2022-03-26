@@ -6,7 +6,6 @@ import br.com.timesheet.service.TimeLogService
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiResponse
 import io.swagger.annotations.ApiResponses
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.format.annotation.DateTimeFormat
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -40,7 +39,7 @@ class TimeLogController(
     fun getTimeLogByEmployeeId(@PathVariable("employeeId") employeeId: Long,
                                @PathVariable("date") @Valid @DateTimeFormat(pattern = "yyyy-MM-dd") date: String
     ): ResponseEntity<TimeLogResponse> =
-        employeeService.findEmployeeById(employeeId).let {
+        employeeService.findEmployee(employeeId).let {
             timeLogService.getTimeLogByEmployeeAndDate(employeeId, LocalDate.parse(date))
                 .run {
                     ResponseEntity(TimeLogResponse(it.name, this).toJson(), HttpStatus.OK)
@@ -60,7 +59,7 @@ class TimeLogController(
         ApiResponse(code = 400, message = "Limite de horas diárias excedidas"),
     ])
     fun registerTimeLog(@PathVariable("employeeId") employeeId: Long): ResponseEntity<TimeLogResponse> =
-        employeeService.findEmployeeById(employeeId)
+        employeeService.findEmployee(employeeId)
             .let { employeeDTO ->
                 timeLogService.registerTimeLog(employeeDTO)
                     .run {

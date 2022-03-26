@@ -11,7 +11,7 @@ data class ErrorMessageResponse(
     @JsonProperty
     val status: HttpStatus,
     @JsonProperty
-    val message: String?,
+    val message: String = "",
     @JsonProperty
     val date: LocalDateTime = LocalDateTime.now()
 )
