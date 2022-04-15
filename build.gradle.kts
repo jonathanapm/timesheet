@@ -29,9 +29,6 @@ dependencies {
 	implementation("io.springfox:springfox-swagger2:2.9.2")
 	implementation("org.springframework.boot:spring-boot-starter-validation:2.6.4")
 	implementation("org.springframework.boot:spring-boot-starter-web:2.6.3")
-	implementation("org.springframework.boot:spring-boot-starter-security:2.6.4")
-	implementation("io.jsonwebtoken:jjwt:0.9.1")
-
 }
 
 tasks.withType<KotlinCompile> {
