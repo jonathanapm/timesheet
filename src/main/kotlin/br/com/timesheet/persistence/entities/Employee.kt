@@ -1,7 +1,6 @@
 package br.com.timesheet.persistence.entities
 
 import br.com.timesheet.persistence.enum.PhoneType
-import org.springframework.security.core.userdetails.UserDetails
 import java.time.LocalDate
 import java.time.LocalDateTime
 import javax.persistence.*

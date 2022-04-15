@@ -6,9 +6,7 @@ import br.com.timesheet.controller.exception.LimitedAttemptsException
 import br.com.timesheet.controller.response.ErrorMessageResponse
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.AuthenticationException
 import org.springframework.web.bind.MethodArgumentNotValidException
-import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
 import java.time.format.DateTimeParseException
@@ -62,15 +60,6 @@ class ControllerAdviceRequest {
      */
     @ExceptionHandler(value = [EmployeeAlreadyRegisteredException::class])
     fun handleEmployeeAlreadyRegistered(e: EmployeeAlreadyRegisteredException): ResponseEntity<ErrorMessageResponse>  =
-        ErrorMessageResponse(HttpStatus.BAD_REQUEST, e.message).let {
-            return ResponseEntity(it, it.status)
-        }
-
-    /**
-     * Falha na autenticação
-     */
-    @ExceptionHandler(value = [AuthenticationException::class])
-    fun handleAuthentication(e: AuthenticationException): ResponseEntity<ErrorMessageResponse>  =
         ErrorMessageResponse(HttpStatus.BAD_REQUEST, e.message).let {
             return ResponseEntity(it, it.status)
         }

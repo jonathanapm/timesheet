@@ -14,11 +14,4 @@ interface EmployeeRepository: JpaRepository<Employee, Long> {
      * @return dados do funcionário encontrado
      */
     fun findByDocument(document: String): Optional<Employee>
-
-    /**
-     * Busca um usuário por email
-     * @param email do funcionário
-     * @return dados do funcionário encontrado
-     */
-    fun findByEmail(email: String): Optional<Employee>
 }
