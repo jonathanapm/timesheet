@@ -41,27 +41,6 @@ data class Employee(
     @Column(nullable = false)
     val email: String,
 
-    @Column(name = "login_security", nullable = false)
-    val loginSecurity: String,
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    val profiles: List<Profile>,
-
     @OneToMany(mappedBy = "employee")
     val timeLogList: List<TimeLog>
-): UserDetails {
-
-    override fun getAuthorities() = profiles
-
-    override fun getPassword() =  loginSecurity
-
-    override fun getUsername() = email
-
-    override fun isAccountNonExpired() = true
-
-    override fun isAccountNonLocked() = true
-
-    override fun isCredentialsNonExpired() = true
-
-    override fun isEnabled() = true
-}
+)
