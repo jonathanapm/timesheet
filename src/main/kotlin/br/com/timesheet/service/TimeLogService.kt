@@ -6,7 +6,6 @@ import br.com.timesheet.model.dto.TimeLogDTO
 import br.com.timesheet.model.util.Mapper
 import br.com.timesheet.persistence.entities.TimeLog
 import br.com.timesheet.persistence.repository.TimeLogRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 

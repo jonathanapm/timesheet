@@ -18,7 +18,7 @@ class EmployeeService(private val employeeRepository: EmployeeRepository) {
      */
     fun saveEmployee(employeeDTO: EmployeeDTO): EmployeeDTO {
         try {
-            findByDocument(employeeDTO.document).map {
+            findEmployeeRepository(employeeDTO.document).map {
                 throw EmployeeAlreadyRegisteredException("Funcionário já existe para o documento ${employeeDTO.document}")
             }
             return employeeRepository.save(Mapper.convert<EmployeeDTO, Employee>(employeeDTO)).let(Mapper::convert)
@@ -27,13 +27,13 @@ class EmployeeService(private val employeeRepository: EmployeeRepository) {
         }
     }
 
-    /**
+    /**q
      * Deleta um funcionário da base
      * @param employeeId identificar do funcionário
      */
     fun deleteEmployee(employeeId: Long): Unit =
         try {
-            employeeRepository.findById(employeeId)
+            findEmployeeRepository(employeeId)
                 .map(employeeRepository::delete)
                 .orElseThrow(::EmployeeNotFound)
         } catch (e: RuntimeException) {
@@ -47,7 +47,7 @@ class EmployeeService(private val employeeRepository: EmployeeRepository) {
      */
     fun findEmployee(employeeId: Long): EmployeeDTO =
         try {
-            employeeRepository.findById(employeeId)
+            findEmployeeRepository(employeeId)
                 .map { Mapper.convert<Employee, EmployeeDTO>(it) }
                 .orElseThrow(::EmployeeNotFound)
         } catch (e: RuntimeException) {
@@ -60,14 +60,11 @@ class EmployeeService(private val employeeRepository: EmployeeRepository) {
      * @return dados do funcionário encontrado
      */
     fun findEmployee(document: String): EmployeeDTO =
-        findByDocument(document)
+        findEmployeeRepository(document)
             .map { Mapper.convert<Employee, EmployeeDTO>(it) }
             .orElseThrow(::EmployeeNotFound)
 
-    private fun findByDocument(document: String) =
-        try {
-            employeeRepository.findByDocument(document)
-        }catch (e: RuntimeException) {
-            throw RuntimeException("Erro na busca de funcionário por documento", e)
-        }
+    private fun findEmployeeRepository(document: String) = employeeRepository.findByDocument(document)
+
+    private fun findEmployeeRepository(employeeId: Long) = employeeRepository.findById(employeeId)
 }

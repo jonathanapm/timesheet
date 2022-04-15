@@ -17,10 +17,9 @@ import javax.validation.Valid
  */
 @RestController
 @RequestMapping("/employees")
-class EmployeeController {
-
-    @Autowired
-    private lateinit var employeeService: EmployeeService
+class EmployeeController(
+    private val employeeService: EmployeeService
+) {
 
     /**
      * Salvar um novo funcionário na base
