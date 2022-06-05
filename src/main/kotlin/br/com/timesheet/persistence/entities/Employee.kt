@@ -11,7 +11,7 @@ data class Employee(
     @Id
     @Column(name = "employeeId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long = 1L,
 
     @Column(nullable = false)
     val name: String = "",
@@ -37,9 +37,6 @@ data class Employee(
     @Column(name = "create_date", nullable = false)
     val createDate: LocalDateTime = LocalDateTime.now(),
 
-    @Column(nullable = false)
-    val email: String,
-
     @OneToMany(mappedBy = "employee")
-    val timeLogList: List<TimeLog>
+    val timeLogList: List<TimeLog> = listOf()
 )

@@ -3,14 +3,19 @@ package br.com.timesheet.service
 import br.com.timesheet.controller.exception.LimitedAttemptsException
 import br.com.timesheet.model.dto.EmployeeDTO
 import br.com.timesheet.model.dto.TimeLogDTO
-import br.com.timesheet.model.util.Mapper
+import br.com.timesheet.model.mapper.ToEmployeeMapper
+import br.com.timesheet.model.mapper.ToTimeLogDTOMapper
 import br.com.timesheet.persistence.entities.TimeLog
 import br.com.timesheet.persistence.repository.TimeLogRepository
 import org.springframework.stereotype.Service
 import java.time.LocalDate
 
 @Service
-class TimeLogService(private val timeLogRepository: TimeLogRepository) {
+class TimeLogService(
+    private val timeLogRepository: TimeLogRepository,
+    private val toEmployeeMapper: ToEmployeeMapper,
+    private val toTimeLogDTOMapper: ToTimeLogDTOMapper
+) {
 
     companion object {
         const val REGISTER_MAX = 4
@@ -26,7 +31,7 @@ class TimeLogService(private val timeLogRepository: TimeLogRepository) {
             if (it.size >= REGISTER_MAX) {
                 throw LimitedAttemptsException()
             }
-            return it.plus(TimeLog(employee = Mapper.convert(employeeDTO)))
+            return it.plus(TimeLog(employee = toEmployeeMapper.map(employeeDTO)))
                 .let(::saveTimeLog)
         }
     }
@@ -38,7 +43,7 @@ class TimeLogService(private val timeLogRepository: TimeLogRepository) {
      */
     private fun saveTimeLog(timeLogList: List<TimeLog>): List<TimeLogDTO> =
         try {
-            timeLogRepository.saveAll(timeLogList).map(Mapper::convert)
+            timeLogRepository.saveAll(timeLogList).map(toTimeLogDTOMapper::map)
         } catch (e: RuntimeException) {
             throw RuntimeException("Erro ao salvar registro de horas", e)
         }
@@ -50,7 +55,7 @@ class TimeLogService(private val timeLogRepository: TimeLogRepository) {
      * @return dados encontrados
      */
     fun getTimeLogByEmployeeAndDate(employeeId: Long, date: LocalDate): List<TimeLogDTO> =
-        findTimeLog(employeeId, date).let(Mapper::convert)
+        findTimeLog(employeeId, date).map(toTimeLogDTOMapper::map)
 
     private fun findTimeLog(employeeId: Long, date: LocalDate?): List<TimeLog> =
         try {

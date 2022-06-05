@@ -9,27 +9,27 @@ import javax.validation.constraints.NotBlank
 
 class EmployeeDTO {
     @JsonIgnore
-    val id: Long = 1L
+    var id: Long = 1L
 
     @field:NotBlank(message = "Nome deve ser informado")
-    val name: String = ""
+    var name: String = ""
 
     @field:NotBlank(message = "Documento deve ser informado")
-    val document: String = ""
+    var document: String = ""
 
     @field:DateTimeFormat(pattern = "yyyy-MM-dd")
-    val birthDate: LocalDate = LocalDate.now()
+    var birthDate: LocalDate = LocalDate.now()
 
-    val office: String = ""
+    var office: String = ""
 
-    val completeName: String = ""
+    var completeName: String = ""
 
-    val phone: String = ""
+    var phone: String = ""
 
-    val phoneType: PhoneType = PhoneType.MOBILE
+    var phoneType: PhoneType = PhoneType.MOBILE
 
     @JsonIgnore
-    val createDate: LocalDateTime = LocalDateTime.now()
+    var createDate: LocalDateTime = LocalDateTime.now()
 }
 
 
