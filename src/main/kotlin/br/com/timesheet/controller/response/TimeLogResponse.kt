@@ -19,9 +19,9 @@ data class TimeLogResponse(
         DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss").let {
             this.timeLogList.forEach { timeLogDTO ->
                 if(count == 0 || count == 2) {
-                    listResponse.add("Entrada as ${ it.format(timeLogDTO.registrationDateTime)}")
+                    listResponse.add("Entrada as ${ it.format(timeLogDTO.registrationDate)}")
                 } else {
-                    listResponse.add("Saída as ${ it.format( timeLogDTO.registrationDateTime)}")
+                    listResponse.add("Saída as ${ it.format( timeLogDTO.registrationDate)}")
                 }
                 count++
             }
